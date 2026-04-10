@@ -61,4 +61,5 @@ function oneDriveProxy() {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), oneDriveProxy()],
+  base: "/dimagsekhel-dashboard/",
 })
