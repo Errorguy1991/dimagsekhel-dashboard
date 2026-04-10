@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-ipl-navy: #18184a;
+  --color-ipl-dark: #11141c;
+  --color-ipl-blue: #19398a;
+  --color-ipl-blue-deep: #1b3d89;
+  --color-ipl-orange: #ef4123;
+  --color-ipl-orange-end: #ef7923;
+  --color-ipl-cyan: #329ed9;
+  --color-ipl-green: #01a54b;
+  --color-ipl-red: #ff290c;
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #f0f2f8;
+    color: #11141c;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+  a { text-decoration: none; }
+  img { border: none; outline: 0; }
+  ul, li { list-style: none; }
+}
+
+.ipl-gradient-header { background: linear-gradient(71.81deg, #18184a 25.64%, #19398a 66.22%, #18184a 114.53%); }
+.ipl-gradient-orange { background: linear-gradient(90.15deg, #ef4123 -4.45%, #ef7923 52.36%, #ef4123 118.57%); }
+.ipl-gradient-strip { background: linear-gradient(92.04deg, #18184a 24.18%, #19398a 50.95%, #18184a 110.32%); }
+
+.bottom-section-bg {
+  background-color: #f0f2f8;
+  background-image: url('https://www.iplt20.com/assets/images/rounded_spiral-bottom-section-bg.png');
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  background-position: center top -700px;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #19398a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #ef4123; }
