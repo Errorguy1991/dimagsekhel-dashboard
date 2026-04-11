@@ -219,6 +219,7 @@ export default function App() {
   const [winners, setWinners] = useState([]);
   const [winCalc, setWinCalc] = useState({ headers: [], rows: [] });
   const [winAmount, setWinAmount] = useState({ headers: [], rows: [] });
+  const [finalAmount, setFinalAmount] = useState({ headers: [], rows: [] });
   const [leaderboard, setLeaderboard] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [liveScores, setLiveScores] = useState([]);
@@ -319,6 +320,21 @@ export default function App() {
       
       setLeaderboard(lb);
       setWinAmount({ headers: hdr, rows });
+    }
+    const s6 = wb.Sheets['Settlement'];
+    if (s6) {
+      const j = XLSX.utils.sheet_to_json(s6, { header: 1, raw: false });
+      if (j.length > 0) {
+        const maxCols = Math.max(...j.map(r => r.length));
+        const hdr = Array.from({ length: maxCols }, (_, idx) => {
+          const val = j[0][idx];
+          return (val !== undefined && val !== null && String(val).trim().length > 0) ? String(val).trim() : `Column ${idx + 1}`;
+        });
+        const rows = j.slice(1)
+          .map(r => Array.from({ length: maxCols }, (_, idx) => (idx < r.length ? r[idx] : '')))
+          .filter(r => r[0] && String(r[0]).trim().toLowerCase() !== 'total' && String(r[0]).trim().toLowerCase() !== 'grand total');
+        setFinalAmount({ headers: hdr, rows });
+      }
     }
   }, []);
 
@@ -496,6 +512,7 @@ export default function App() {
     { id: 'winners', label: 'Winners' },
     { id: 'calc', label: 'Winner Calc' },
     { id: 'amounts', label: 'Win Amounts' },
+    { id: 'final', label: 'Final Amount' },
   ];
 
   const topEarners = leaderboard.slice(0, 3);
@@ -671,7 +688,12 @@ export default function App() {
         check(w.w5, 'rank5', 1);
      });
   }
-  const posStatsArray = Object.values(positionStats).sort((a,b) => b.points - a.points);
+  const posStatsArray = Object.values(positionStats).sort((a,b) => {
+     const totalA = a.rank1 + a.rank2 + a.rank3 + a.rank4 + a.rank5;
+     const totalB = b.rank1 + b.rank2 + b.rank3 + b.rank4 + b.rank5;
+     if (totalA !== totalB) return totalB - totalA;
+     return b.points - a.points;
+  });
 
   return (
     <div className="min-h-screen font-['Bricolage_Grotesque',sans-serif]">
@@ -1178,6 +1200,44 @@ export default function App() {
                         </tr>
                       );
                     })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ── FINAL AMOUNT TAB ── */}
+          {activeTab === 'final' && (
+            <div className="bg-white rounded-[14px] overflow-hidden shadow border border-[#ddd]">
+              <SectionHeader icon={DollarSign} title="Final Amount" subtitle="Settlement Summary" id="final" />
+              <div className="overflow-x-auto overflow-y-auto max-h-[70vh]">
+                <table className="w-full text-sm relative">
+                  <thead className="sticky top-0 z-30 shadow-md">
+                    <tr className="bg-[#1b3d89] text-white text-xs font-semibold uppercase tracking-wider">
+                      {finalAmount.headers.map((h, i) => (
+                        <th key={i} className={clsx("px-4 py-3", i === 0 ? "text-left" : "text-right")}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {finalAmount.rows.map((r, ri) => (
+                      <tr key={ri} className={clsx("border-b border-[#f2f2f2] hover:bg-[#f4f7ff]", ri % 2 === 1 && "bg-[rgba(25,57,138,0.04)]")}>
+                        {r.map((c, ci) => {
+                          const numericValue = typeof c === 'number' ? c : (typeof c === 'string' ? parseFloat(String(c).replace(/[^0-9.-]/g, '')) : NaN);
+                          const isNumeric = !isNaN(numericValue);
+                          return (
+                            <td key={ci} className={clsx("px-4 py-3 align-middle",
+                              ci === 0 ? "font-bold text-[#18184a]" :
+                              isNumeric && numericValue >= 500 ? "text-[#01a54b] font-bold text-right" :
+                              isNumeric && numericValue < 500 ? "text-[#ef4123] font-bold text-right" :
+                              "text-[#7b7b7b] text-right"
+                            )}>
+                              {ci === 0 ? (c ?? '-') : isNumeric ? (numericValue === 0 ? '0' : `₹${Math.round(numericValue * 100) / 100}`) : (c ?? '-')}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
