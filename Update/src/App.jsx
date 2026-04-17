@@ -976,6 +976,8 @@ export default function App() {
                               <th className="px-4 py-3 text-center font-extrabold text-[#525252] text-[11px] uppercase tracking-wider">🥇 1st</th>
                               <th className="px-4 py-3 text-center font-extrabold text-[#525252] text-[11px] uppercase tracking-wider">🥈 2nd</th>
                               <th className="px-4 py-3 text-center font-extrabold text-[#525252] text-[11px] uppercase tracking-wider">🥉 3rd</th>
+                              <th className="px-4 py-3 text-center font-extrabold text-[#525252] text-[11px] uppercase tracking-wider">4th</th>
+                              <th className="px-4 py-3 text-center font-extrabold text-[#525252] text-[11px] uppercase tracking-wider">5th</th>
                               <th className="px-4 py-3 text-center font-extrabold text-[#525252] text-[11px] uppercase tracking-wider">Total Top 5</th>
                            </tr>
                          </thead>
@@ -986,6 +988,8 @@ export default function App() {
                                <td className="px-4 py-2.5 text-center font-bold text-[#ef4123]">{p.rank1 || '-'}</td>
                                <td className="px-4 py-2.5 text-center font-bold text-[#19398a]">{p.rank2 || '-'}</td>
                                <td className="px-4 py-2.5 text-center font-bold text-[#c78b00]">{p.rank3 || '-'}</td>
+                               <td className="px-4 py-2.5 text-center font-bold text-[#4a4a4a]">{p.rank4 || '-'}</td>
+                               <td className="px-4 py-2.5 text-center font-bold text-[#4a4a4a]">{p.rank5 || '-'}</td>
                                <td className="px-4 py-2.5 text-center font-semibold text-[#7b7b7b]">
                                  <span className="bg-[#e9ecef] px-2 py-0.5 rounded-full text-[10px] text-[#525252]">{p.rank1 + p.rank2 + p.rank3 + p.rank4 + p.rank5}</span>
                                </td>
